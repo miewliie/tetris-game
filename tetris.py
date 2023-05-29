@@ -169,10 +169,12 @@ class Tetris:
         self.score = 0
 
     def new_piece(self, shapes):
+        """ Create new piece """
         shape = random.choice(shapes)
         return Tetromino(x=START_WIDTH, y=START_HEIGHT, shape=shape)
 
     def valid_move(self, piece, x, y, rotation):
+        """ Check if next move is valid """
         for i, row in enumerate(piece.shape[(piece.rotation + rotation) % len(self.current_piece.shape)]):
             for j, cell in enumerate(row):
                 try:
@@ -186,6 +188,7 @@ class Tetris:
 
 
     def clear_lines(self):
+        """ Clear line once line is full with piece """
         lines_cleared = 0
         for i, row in enumerate(self.grid):
             if all(cell != 0 for cell in row):
@@ -195,6 +198,7 @@ class Tetris:
         return lines_cleared
 
     def lock_piece(self, piece):
+        """ Lock piece when unable to move anymore """
         for i, row in enumerate(piece.shape[piece.rotation % len(piece.shape)]):
             for j, cell in enumerate(row):
                 if cell == 'O':
@@ -209,6 +213,7 @@ class Tetris:
         return lines_cleared
 
     def update(self):
+        """ move piece down """
         if not self.game_over:
             if self.valid_move(piece=self.current_piece, x=0, y=1, rotation=0):
                 self.current_piece.y += 1
@@ -216,7 +221,7 @@ class Tetris:
                 self.lock_piece(self.current_piece)
 
     def draw(self, screen: Pixels):
-
+        """ draw piece on the screen with current position """
         screen.clear()
 
         for y, row in enumerate(self.grid):
@@ -281,24 +286,17 @@ def main(stdscr, pixels: Pixels):
             game.draw(pixels)
 
         if ch == curses.KEY_LEFT and game.valid_move(piece=game.current_piece, x=-1, y=0, rotation=0):
-            print('left',game.current_piece.x)
             if game.current_piece.x != 0:
                 game.current_piece.x -= 1
         if ch == curses.KEY_RIGHT and game.valid_move(piece=game.current_piece, x=1, y=0, rotation=0):
-            print('right', game.current_piece.x)
             game.current_piece.x += 1  
         if ch == curses.KEY_DOWN and game.valid_move(piece=game.current_piece, x=0, y=1, rotation=0):
-            print('down', game.current_piece.x)
             game.current_piece.y += 1
         if ch == curses.KEY_UP and game.valid_move(piece=game.current_piece, x=0, y=0, rotation=1):
-            print('up', game.current_piece.x)
-            #if game.current_piece.x != 0:
             game.current_piece.rotation += 1
         if ch == ord(' '):
-            print('fast')
             while game.valid_move(piece=game.current_piece, x=0, y=1, rotation=0):
                 game.current_piece.y += 1  
-            print('lock')
             game.lock_piece(game.current_piece) 
         
         pixels.show()
@@ -312,7 +310,6 @@ def main(stdscr, pixels: Pixels):
             game.current_piece = game.new_piece(NO_SHAPE)
 
             draw_game_over(screen=pixels, x=5, y=1, letter_sp=3)
-            print("above")
             if ch == curses.KEY_DOWN:
                 game = Tetris(WIDTH, HEIGHT)
 
