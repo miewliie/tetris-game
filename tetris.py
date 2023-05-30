@@ -1,6 +1,7 @@
 import curses, random, time
 from lib.pixels import *
 from lib.pixels import Color as rgb
+from lib.words import WORDS
 
 
 # Screen dimensions
@@ -115,7 +116,7 @@ SHAPES = [
     ]
 ]
 
-LETTERS = [
+XLETTERS = [
         ['OOOO.',
          'O....',
          'O.OO.',
@@ -262,11 +263,27 @@ def draw_game_over(screen: Pixels, x: int, y: int, letter_sp: int):
     pos_x: int = x
     pos_y: int = y
 
-    for t, letter in enumerate(LETTERS):
-        for i, row in enumerate(letter):
-            for j, cell in enumerate(row):
-                if cell == 'O':
-                    screen.set((pos_x * t + letter_sp) + j, pos_y + i, GREEN)
+    word_game = WORDS[0]
+    word_over = WORDS[1]
+
+    space_char_game = 0
+
+    for c, char in enumerate(word_game):
+        for i, row in enumerate(char):
+            for j, col in enumerate(row):
+                if col == 'O':
+                    screen.set((pos_x - i) - (space_char_game + letter_sp), pos_y + j, WHITE)
+        space_char_game += 6
+
+    space_char_over = 0
+    pos_y_over = 5
+    for c, char in enumerate(word_over):
+        for i, row in enumerate(char):
+            for j, col in enumerate(row):
+                if col == 'O':
+                    screen.set((pos_x - i) - (space_char_over + letter_sp), pos_y_over + pos_y + j, WHITE)
+        space_char_over += 6
+
     screen.show()
     print('done')
     
@@ -309,7 +326,7 @@ def main(stdscr, pixels: Pixels):
             game.grid = [[0 for _ in range(WIDTH)] for _ in range(HEIGHT)]
             game.current_piece = game.new_piece(NO_SHAPE)
 
-            draw_game_over(screen=pixels, x=5, y=1, letter_sp=3)
+            draw_game_over(screen=pixels, x=32, y=0, letter_sp=1)
             if ch == curses.KEY_DOWN:
                 game = Tetris(WIDTH, HEIGHT)
 
