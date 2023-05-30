@@ -2,6 +2,7 @@ import curses, random, time
 from lib.pixels import *
 from lib.pixels import Color as rgb
 from lib.words import WORDS
+from lib.shapes import SHAPES, NO_SHAPE
 
 
 # Screen dimensions
@@ -20,137 +21,6 @@ PURPLE4 = rgb(209, 140, 255)
 PURPLE5 = rgb(218, 163, 215)
 
 COLORS = [PURPLE1, PURPLE2, PURPLE3, PURPLE4, PURPLE5, WHITE]
-
-# Tetromino shapes
-SHAPES = [
-        [
-        ['....',
-         '....',
-         'OOOO',
-         '....'],
-        ['O...',
-         'O...',
-         'O...',
-         'O...']
-    ],
-    [
-        ['.O..',
-         'OOO.',
-         '....',
-         '....'],
-        ['.O..',
-         'OO..',
-         '.O..',
-         '....'],
-        ['OOO.',
-         '.O..',
-         '....',
-         '....'],
-        ['O...',
-         'OO..', 
-         'O...',
-         '....']
-        ],
-    [
-        [
-         '.OO.',
-         'OO..',
-         '....',
-         '....'],
-        ['O...',
-         'OO.',
-         '.O..',
-         '....'],
-    ],
-    [
-        ['....',
-         'OO..',
-         '.OO',
-         '....'],
-        ['.O.',
-         'OO..',
-         'O...',
-         '....']
-    ],
-    [
-        ['O...',
-         'O...',
-         'OO..',
-         '....'],
-        ['..O.',
-         'OOO.',
-         '....',
-         '....'],
-        ['OO..',
-         '.O..',
-         '.O..',
-         '....'],
-        ['OOO.',
-         'O...',
-         '....',
-         '....']
-    ],
-    [
-        ['OO..',
-         'O...',
-         'O...',
-         '....'],
-        ['O...',
-         'OOO.',
-         '....',
-         '....'],
-        ['.O..',
-         '.O..',
-         'OO..',
-         '....'],
-        ['OOO.',
-         '..O.',
-         '....',
-         '....']
-    ],
-    [
-        ['....',
-         'OO..',
-         'OO..',
-         '....']
-    ]
-]
-
-XLETTERS = [
-        ['OOOO.',
-         'O....',
-         'O.OO.',
-         'O..O.',
-         'OOOO.'],
-        ['OOOO.',
-         'O..O.',
-         'O..O.',
-         'O..O.',
-         'OOOO.'],
-        ['O...O',
-         'O...O',
-         'O...O',
-         '.O.O.',
-         '..O..'],
-        ['.OOOO',
-         '.O...',
-         '.OOOO',
-         '.O...',
-         '.OOOO'],
-        ['.OOO.',
-         '.O..O',
-         '.OOO.',
-         '.O.O.',
-         '.O..O']
-        ]
-
-NO_SHAPE = [
-    ['....',
-     '....',
-     '....',
-     '....',
-     '....']
-]
 
 class Tetromino:
     def __init__(self, x, y, shape):
