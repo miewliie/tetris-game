@@ -91,6 +91,11 @@ class Tetris:
             else:
                 self.lock_piece(self.current_piece)
 
+
+    def convert_to_vertical(self, game_position):
+        return 31 - game_position
+
+
     def draw(self, screen: Pixels):
         """ draw piece on the screen with current position """
         screen.clear()
@@ -98,24 +103,27 @@ class Tetris:
         for y, row in enumerate(self.grid):
             for x, cell in enumerate(row):
                 if cell != 0:
-                    xx = 31 - y
+                    xx = self.convert_to_vertical(game_position=y)
                     yy = x
                     screen.set(x=xx, y=yy, color=cell)
         screen.show()
 
         if self.current_piece:
-            for i, row in enumerate(self.current_piece.shape[self.current_piece.rotation % len(self.current_piece.shape)]):
+            current_shape = self.current_piece.shape[self.current_piece.rotation % len(self.current_piece.shape)]
+            for i, row in enumerate(current_shape):
                 for j, cell in enumerate(row):
                     if cell == 'O':
-                        xx = 31 - (self.current_piece.y + i)
+                        game_position = self.current_piece.y + i
+                        xx = self.convert_to_vertical(game_position=game_position)
                         yy = self.current_piece.x + j
                         screen.set(x=xx, y=yy, color=self.current_piece.color)
             screen.show()
 
-            for i, row in enumerate(self.current_piece.shape[self.current_piece.rotation % len(self.current_piece.shape)]):
+            for i, row in enumerate(current_shape):
                 for j, cell in enumerate(row):
                     if cell == 'O':
-                        xx = 31 - (self.current_piece.y + i)
+                        game_position = self.current_piece.y + i
+                        xx = self.convert_to_vertical(game_position=game_position)
                         yy = self.current_piece.x + j
                         screen.set(x=xx, y=yy, color=BLACK)
 
