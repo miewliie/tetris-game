@@ -198,6 +198,10 @@ def main(stdscr, pixels: Pixels):
 
     game = Tetris(WIDTH, HEIGHT)
     
+    fall_time = 0
+    fall_speed = 200
+    refresh_rate = 0.6
+
     running = True
     while running:
         ch = stdscr.getch()
@@ -221,7 +225,15 @@ def main(stdscr, pixels: Pixels):
             game.lock_piece(game.current_piece) 
         
         pixels.show()
-    
+        
+        fall_time += 1
+        if fall_time >= fall_speed:
+            fall_time = 0
+            if refresh_rate <= 0:
+                refresh_rate = 0.6
+            #make the falling time faster
+            refresh_rate -= 0.02
+
         game.update()
         game.draw_shape(pixels)
 
@@ -236,7 +248,7 @@ def main(stdscr, pixels: Pixels):
             if ch == curses.KEY_DOWN:
                 game = Tetris(WIDTH, HEIGHT)
 
-        time.sleep(0.6)
+        time.sleep(refresh_rate)
 
 
 if __name__ == "__main__":
