@@ -97,7 +97,7 @@ class Tetris:
         return 31 - game_position
 
 
-    def draw(self, screen: Pixels):
+    def draw_shape(self, screen: Pixels):
         """ draw piece on the screen with current position """
         screen.clear()
 
@@ -128,6 +128,14 @@ class Tetris:
                         yy = self.current_piece.x + j
                         screen.set(x=xx, y=yy, color=BLACK)
 
+def set_score(screen, score, s, x, y, start_x, start_y):
+    for i, row in enumerate(NUMBERS[score[s]]):
+                for j, col in enumerate(row):
+                    if col == 'O':
+                        screen.set(x - start_x - i, start_y + y + j, WHITE)
+    start_y += 3
+    return start_y
+
 
 def draw_score(screen, score, x, y):
     """Draw the score on the screen"""
@@ -139,21 +147,13 @@ def draw_score(screen, score, x, y):
 
     for s in range(0, len(score)):
         if start_y <= 7:
-            for i, row in enumerate(NUMBERS[score[s]]):
-                for j, col in enumerate(row):
-                    if col == 'O':
-                        screen.set(x - start_x - i, start_y + y + j, WHITE)
-            start_y += 3
+            start_y = set_score(screen=screen, score=score, s=s, x=x, y=y, 
+                                start_x=start_x, start_y=start_y)
         else:
             start_y = 0
-            start_x += WIDTH
-            for i, row in enumerate(NUMBERS[score[s]]):
-                for j, col in enumerate(row):
-                    if col == 'O':
-                        screen.set(x - start_x - i, start_y + y + j, WHITE)
-            start_y += 3
-
-
+            start_x += 6
+            start_y = set_score(screen=screen, score=score, s=s, x=x, y=y, 
+                                start_x=start_x, start_y=start_y)
 
     screen.show()
     time.sleep(0.7)
@@ -189,7 +189,8 @@ def draw_game_over(screen: Pixels, x: int, y: int, letter_sp: int):
 
     screen.show()
     time.sleep(0.7)
-    
+ 
+
 def main(stdscr, pixels: Pixels):
 
     curses.curs_set(False)
@@ -203,7 +204,7 @@ def main(stdscr, pixels: Pixels):
 
         is_clear = game.clear_lines()
         if is_clear:
-            game.draw(pixels)
+            game.draw_shape(pixels)
 
         if ch == curses.KEY_LEFT and game.valid_move(piece=game.current_piece, x=-1, y=0, rotation=0):
             if game.current_piece.x != 0:
@@ -222,7 +223,7 @@ def main(stdscr, pixels: Pixels):
         pixels.show()
     
         game.update()
-        game.draw(pixels)
+        game.draw_shape(pixels)
 
         if game.game_over:
             #reset screen
