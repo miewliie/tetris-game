@@ -53,7 +53,6 @@ class Tetris:
                     if cell == 'O' and (self.grid[piece.y + i +y][piece.x + j + x] != 0):
                         return False
                 except IndexError:
-                    print("error ++")
                     return False
 
         return True
@@ -166,10 +165,10 @@ def draw_game_over(screen: Pixels, x: int, y: int, letter_sp: int):
     pos_x: int = x
     pos_y: int = y
 
-    word_game = WORDS[0]
-    word_over = WORDS[1]
+    word_game: list[list[str]] = WORDS[0]
+    word_over: list[list[str]] = WORDS[1]
 
-    space_char_game = 0
+    space_char_game: int = 0
 
     for c, char in enumerate(word_game):
         for i, row in enumerate(char):
