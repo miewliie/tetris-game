@@ -3,6 +3,7 @@ from lib.pixels import *
 from lib.pixels import Color as rgb
 from lib.words import WORDS
 from lib.shapes import SHAPES, NO_SHAPE
+from lib.numbers import NUMBERS
 
 
 # Screen dimensions
@@ -130,9 +131,33 @@ class Tetris:
 
 def draw_score(screen, score, x, y):
     """Draw the score on the screen"""
-    font = pygame.font.Font(None, 36)
-    text = font.render(f"Score: {score}", True, WHITE)
-    screen.blit(text, (x, y))
+    screen.clear()
+
+    score = str(score)
+    start_y = 0
+    start_x = 0
+
+    for s in range(0, len(score)):
+        if start_y <= 7:
+            for i, row in enumerate(NUMBERS[score[s]]):
+                for j, col in enumerate(row):
+                    if col == 'O':
+                        screen.set(x - start_x - i, start_y + y + j, WHITE)
+            start_y += 3
+        else:
+            start_y = 0
+            start_x += WIDTH
+            for i, row in enumerate(NUMBERS[score[s]]):
+                for j, col in enumerate(row):
+                    if col == 'O':
+                        screen.set(x - start_x - i, start_y + y + j, WHITE)
+            start_y += 3
+
+
+
+    screen.show()
+    time.sleep(0.7)
+
 
 def draw_game_over(screen: Pixels, x: int, y: int, letter_sp: int):
     """Draw the game over text on the screen"""
@@ -163,7 +188,7 @@ def draw_game_over(screen: Pixels, x: int, y: int, letter_sp: int):
         space_char_over += 6
 
     screen.show()
-    print('done')
+    time.sleep(0.7)
     
 def main(stdscr, pixels: Pixels):
 
@@ -204,7 +229,9 @@ def main(stdscr, pixels: Pixels):
             game.grid = [[0 for _ in range(WIDTH)] for _ in range(HEIGHT)]
             game.current_piece = game.new_piece(NO_SHAPE)
 
-            draw_game_over(screen=pixels, x=32, y=0, letter_sp=1)
+            draw_game_over(screen=pixels, x=31, y=0, letter_sp=1)
+            draw_score(screen=pixels, score=game.score, x=31, y=0)
+
             if ch == curses.KEY_DOWN:
                 game = Tetris(WIDTH, HEIGHT)
 
