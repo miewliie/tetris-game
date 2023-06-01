@@ -11,7 +11,6 @@ WIDTH, HEIGHT = 8, 32
 
 START_WIDTH, START_HEIGHT = 2, 0
 
-# rgbs
 WHITE = rgb(255, 255, 255)
 BLACK = rgb(0, 0, 0)
 
@@ -140,9 +139,9 @@ def draw_score(screen, score, x, y):
     """Draw the score on the screen"""
     screen.clear()
 
-    score = str(score)
-    start_y = 0
-    start_x = 0
+    score: str = str(score)
+    start_y: int = 0
+    start_x: int = 0
 
     for s in range(0, len(score)):
         if start_y <= 7:
