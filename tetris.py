@@ -30,6 +30,7 @@ class Tetromino:
         self.color = random.choice(COLORS)
         self.rotation = 0
 
+
 class Tetris:
     def __init__(self, width, height):
         self.width = width
@@ -39,17 +40,22 @@ class Tetris:
         self.game_over = False
         self.score = 0
 
-    def new_piece(self, shapes):
+
+    def new_piece(self, shapes: list[list[list[str]]]) -> Tetromino:
         """ Create new piece """
         shape = random.choice(shapes)
         return Tetromino(x=START_WIDTH, y=START_HEIGHT, shape=shape)
 
-    def valid_move(self, piece, x, y, rotation):
+
+    def valid_move(self, piece: list[str], 
+                   x: int, y: int, rotation: int) -> bool:
         """ Check if next move is valid """
-        for i, row in enumerate(piece.shape[(piece.rotation + rotation) % len(self.current_piece.shape)]):
+
+        for i, row in enumerate(piece.shape[(piece.rotation + rotation) 
+                                            % len(self.current_piece.shape)]):
             for j, cell in enumerate(row):
                 try:
-                    if cell == 'O' and (self.grid[piece.y + i +y][piece.x + j + x] != 0):
+                    if cell == 'O' and (self.grid[piece.y + i + y][piece.x + j + x] != 0):
                         return False
                 except IndexError:
                     return False
@@ -57,9 +63,9 @@ class Tetris:
         return True
 
 
-    def clear_lines(self):
-        """ Clear line once line is full with piece """
-        lines_cleared = 0
+    def clear_lines(self) -> int:
+        """ Clear line once line is full with pieces """
+        lines_cleared: int = 0
         for i, row in enumerate(self.grid):
             if all(cell != 0 for cell in row):
                 lines_cleared += 1
@@ -67,20 +73,22 @@ class Tetris:
                 self.grid.insert(0, [0 for _ in range(self.width)])
         return lines_cleared
 
-    def lock_piece(self, piece):
+
+    def lock_piece(self, piece: list[str]) -> int:
         """ Lock piece when unable to move anymore """
         for i, row in enumerate(piece.shape[piece.rotation % len(piece.shape)]):
             for j, cell in enumerate(row):
                 if cell == 'O':
                     self.grid[piece.y + i][piece.x + j] = piece.color
 
-        lines_cleared = self.clear_lines()
+        lines_cleared: int = self.clear_lines()
         self.score += lines_cleared * 100
         self.current_piece = self.new_piece(SHAPES)
 
-        if not self.valid_move(self.current_piece, 0, 0, 0):
+        if not self.valid_move(piece=self.current_piece, x=0, y=0, rotation=0):
             self.game_over = True
         return lines_cleared
+
 
     def update(self):
         """ move piece down """
@@ -92,10 +100,12 @@ class Tetris:
 
 
     def convert_to_vertical(self, game_position: int) -> int:
+        """ Convert to vertical right of the screen """
         return 31 - game_position
 
 
     def set_shape(self, screen: Pixels, shape: list[str], color: Color):
+        """ Set shape at position with specific color """
         for i, row in enumerate(shape):
             for j, cell in enumerate(row):
                 if cell == 'O':
@@ -138,6 +148,7 @@ def set_score(screen: Pixels,
               start_x: int, 
               start_y: int
               )-> int:
+    """ Set number at position with color """
 
     for i, row in enumerate(NUMBERS[score[s]]):
                 for j, col in enumerate(row):
@@ -176,6 +187,7 @@ def set_text(screen: Pixels,
              space_bt_char: int, 
              space_after_prev_words: int
              ) -> int:
+    """ Set text at postion with color """
 
     for i, row in enumerate(char):
         for j, col in enumerate(row):
