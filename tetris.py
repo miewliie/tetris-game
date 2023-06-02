@@ -126,7 +126,15 @@ class Tetris:
                         yy = self.current_piece.x + j
                         screen.set(x=xx, y=yy, color=BLACK)
 
-def set_score(screen, score, s, x, y, start_x, start_y):
+def set_score(screen: Pixels, 
+              score: int, 
+              s: int, 
+              x: int, 
+              y: int, 
+              start_x: int, 
+              start_y: int
+              )-> int:
+
     for i, row in enumerate(NUMBERS[score[s]]):
                 for j, col in enumerate(row):
                     if col == 'O':
@@ -135,7 +143,7 @@ def set_score(screen, score, s, x, y, start_x, start_y):
     return start_y
 
 
-def draw_score(screen, score, x, y):
+def draw_score(screen: Pixels, score: int, x: int, y: int):
     """Draw the score on the screen"""
     screen.clear()
 
