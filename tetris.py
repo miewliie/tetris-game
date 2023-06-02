@@ -157,33 +157,46 @@ def draw_score(screen, score, x, y):
     time.sleep(0.7)
 
 
-def draw_game_over(screen: Pixels, x: int, y: int, letter_sp: int):
+def set_text(screen: Pixels, 
+             space_before: int, 
+             char: list[str], 
+             x: int, y: int, 
+             space_bt_char: int, 
+             space_after_prev_words: int
+             ) -> int:
+
+    for i, row in enumerate(char):
+        for j, col in enumerate(row):
+            if col == 'O':
+                screen.set((x - i) - (space_before + space_bt_char), 
+                           space_after_prev_words + y + j, WHITE)
+    space_bt_char += 6
+    return space_bt_char
+
+
+def draw_game_over(screen: Pixels, x: int, y: int, space_before: int):
     """Draw the game over text on the screen"""
     screen.clear()
-
-    pos_x: int = x
-    pos_y: int = y
 
     word_game: list[list[str]] = WORDS[0]
     word_over: list[list[str]] = WORDS[1]
 
-    space_char_game: int = 0
+    space_bt_char: int = 0
 
     for c, char in enumerate(word_game):
-        for i, row in enumerate(char):
-            for j, col in enumerate(row):
-                if col == 'O':
-                    screen.set((pos_x - i) - (space_char_game + letter_sp), pos_y + j, WHITE)
-        space_char_game += 6
+        space_bt_char = set_text(screen=screen, 
+                                 space_before=space_before,
+                                 char=char, x=x, y=y, 
+                                 space_bt_char=space_bt_char, 
+                                 space_after_prev_words=0)
 
-    space_char_over = 0
-    pos_y_over = 5
+    space_bt_char = 0
     for c, char in enumerate(word_over):
-        for i, row in enumerate(char):
-            for j, col in enumerate(row):
-                if col == 'O':
-                    screen.set((pos_x - i) - (space_char_over + letter_sp), pos_y_over + pos_y + j, WHITE)
-        space_char_over += 6
+        space_bt_char = set_text(screen=screen, 
+                                 space_before=space_before,
+                                 char=char, x=x, y=y, 
+                                 space_bt_char=space_bt_char, 
+                                 space_after_prev_words=5)
 
     screen.show()
     time.sleep(0.7)
@@ -240,7 +253,7 @@ def main(stdscr, pixels: Pixels):
             game.grid = [[0 for _ in range(WIDTH)] for _ in range(HEIGHT)]
             game.current_piece = game.new_piece(NO_SHAPE)
 
-            draw_game_over(screen=pixels, x=31, y=0, letter_sp=1)
+            draw_game_over(screen=pixels, x=31, y=0, space_before=1)
             draw_score(screen=pixels, score=game.score, x=31, y=0)
 
             if ch == curses.KEY_DOWN:
