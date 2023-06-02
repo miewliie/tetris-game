@@ -91,8 +91,18 @@ class Tetris:
                 self.lock_piece(self.current_piece)
 
 
-    def convert_to_vertical(self, game_position):
+    def convert_to_vertical(self, game_position: int) -> int:
         return 31 - game_position
+
+
+    def set_shape(self, screen: Pixels, shape: list[str], color: Color):
+        for i, row in enumerate(shape):
+            for j, cell in enumerate(row):
+                if cell == 'O':
+                    game_position = self.current_piece.y + i
+                    xx = self.convert_to_vertical(game_position=game_position)
+                    yy = self.current_piece.x + j
+                    screen.set(x=xx, y=yy, color=color)
 
 
     def draw_shape(self, screen: Pixels):
@@ -108,23 +118,17 @@ class Tetris:
         screen.show()
 
         if self.current_piece:
-            current_shape = self.current_piece.shape[self.current_piece.rotation % len(self.current_piece.shape)]
-            for i, row in enumerate(current_shape):
-                for j, cell in enumerate(row):
-                    if cell == 'O':
-                        game_position = self.current_piece.y + i
-                        xx = self.convert_to_vertical(game_position=game_position)
-                        yy = self.current_piece.x + j
-                        screen.set(x=xx, y=yy, color=self.current_piece.color)
+            current_shape = self.current_piece.shape[self.current_piece.rotation 
+                                                     % len(self.current_piece.shape)]
+            self.set_shape(screen=screen, 
+                        shape=current_shape, 
+                        color=self.current_piece.color)
             screen.show()
+            
+            self.set_shape(screen=screen,
+                           shape=current_shape,
+                           color=BLACK)
 
-            for i, row in enumerate(current_shape):
-                for j, cell in enumerate(row):
-                    if cell == 'O':
-                        game_position = self.current_piece.y + i
-                        xx = self.convert_to_vertical(game_position=game_position)
-                        yy = self.current_piece.x + j
-                        screen.set(x=xx, y=yy, color=BLACK)
 
 def set_score(screen: Pixels, 
               score: int, 
