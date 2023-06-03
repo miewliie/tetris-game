@@ -274,6 +274,7 @@ def main(stdscr, pixels: Pixels):
 
         if game.game_over:
             #reset screen
+            refresh_rate = 0
             game.grid = [[0 for _ in range(WIDTH)] for _ in range(HEIGHT)]
             game.current_piece = game.new_piece(NO_SHAPE)
 
