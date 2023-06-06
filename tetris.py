@@ -269,18 +269,16 @@ def main(stdscr, pixels: Pixels):
         fall_time += 1
         if fall_time >= fall_speed:
             fall_time = 0
-            if refresh_rate <= 0:
-                refresh_rate = 0.6
-
-            #make the falling time faster
             refresh_rate -= 0.1
+
+        if refresh_rate <= 0:
+            refresh_rate = 0.6
 
         game.update()
         game.draw_shape(screen=pixels)
 
         if game.game_over:
             #reset screen
-            refresh_rate = 0
             game.grid = [[0 for _ in range(WIDTH)] for _ in range(HEIGHT)]
             game.current_piece = game.new_piece(NO_SHAPE)
 
@@ -288,6 +286,7 @@ def main(stdscr, pixels: Pixels):
             draw_score(screen=pixels, score=game.score, x=31, y=0)
 
             if ch == curses.KEY_DOWN:
+                refresh_rate = 0
                 game = Tetris(width=WIDTH, height=HEIGHT)
 
         time.sleep(refresh_rate)
