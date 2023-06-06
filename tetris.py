@@ -233,31 +233,36 @@ def main(stdscr, pixels: Pixels):
 
     game = Tetris(WIDTH, HEIGHT)
     
-    fall_time = 0
-    fall_speed = 200
-    refresh_rate = 0.6
+    fall_time: int = 0
+    fall_speed: int = 80
+    refresh_rate: float = 0.6
 
-    running = True
+    running: bool = True
     while running:
         ch = stdscr.getch()
 
-        is_clear = game.clear_lines()
+        is_clear: bool = game.clear_lines()
         if is_clear:
-            game.draw_shape(pixels)
+            game.draw_shape(screen=pixels)
 
-        if ch == curses.KEY_LEFT and game.valid_move(piece=game.current_piece, x=-1, y=0, rotation=0):
+        if ch == curses.KEY_LEFT and game.valid_move(piece=game.current_piece, 
+                                                     x=-1, y=0, rotation=0):
             if game.current_piece.x != 0:
                 game.current_piece.x -= 1
-        if ch == curses.KEY_RIGHT and game.valid_move(piece=game.current_piece, x=1, y=0, rotation=0):
+        if ch == curses.KEY_RIGHT and game.valid_move(piece=game.current_piece, 
+                                                      x=1, y=0, rotation=0):
             game.current_piece.x += 1  
-        if ch == curses.KEY_DOWN and game.valid_move(piece=game.current_piece, x=0, y=1, rotation=0):
+        if ch == curses.KEY_DOWN and game.valid_move(piece=game.current_piece, 
+                                                     x=0, y=1, rotation=0):
             game.current_piece.y += 1
-        if ch == curses.KEY_UP and game.valid_move(piece=game.current_piece, x=0, y=0, rotation=1):
+        if ch == curses.KEY_UP and game.valid_move(piece=game.current_piece, 
+                                                   x=0, y=0, rotation=1):
             game.current_piece.rotation += 1
         if ch == ord(' '):
-            while game.valid_move(piece=game.current_piece, x=0, y=1, rotation=0):
+            while game.valid_move(piece=game.current_piece, 
+                                  x=0, y=1, rotation=0):
                 game.current_piece.y += 1  
-            game.lock_piece(game.current_piece) 
+            game.lock_piece(piece=game.current_piece) 
         
         pixels.show()
         
@@ -266,11 +271,12 @@ def main(stdscr, pixels: Pixels):
             fall_time = 0
             if refresh_rate <= 0:
                 refresh_rate = 0.6
+
             #make the falling time faster
-            refresh_rate -= 0.02
+            refresh_rate -= 0.1
 
         game.update()
-        game.draw_shape(pixels)
+        game.draw_shape(screen=pixels)
 
         if game.game_over:
             #reset screen
@@ -282,7 +288,7 @@ def main(stdscr, pixels: Pixels):
             draw_score(screen=pixels, score=game.score, x=31, y=0)
 
             if ch == curses.KEY_DOWN:
-                game = Tetris(WIDTH, HEIGHT)
+                game = Tetris(width=WIDTH, height=HEIGHT)
 
         time.sleep(refresh_rate)
 
